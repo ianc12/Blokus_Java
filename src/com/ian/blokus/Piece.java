@@ -1,7 +1,5 @@
 package com.ian.blokus;
 
-import com.ian.blokus.Point;
-import com.ian.blokus.Color;
 import java.util.ArrayList;
 
 public class Piece {
@@ -47,17 +45,23 @@ public class Piece {
         
         list.add(addpiece);
         return true;
-    
     }
     
+    public int minDimension() {
+        if (this.width < this.height) {
+            return this.width;
+        }
+        return this.height;
+    }
     
     
     /**
      * 
-     * @return a copy of the piece called on without permutations
+     * @return a copy of the piece without permutations
      */
     public Piece duplicate() {
         ArrayList<Point> newpoints = new ArrayList<Point>();
+        
         for (Point p : this.points) {
             Point newp = new Point(p);
             newpoints.add(newp);
@@ -72,6 +76,9 @@ public class Piece {
     }
     
     
+    /**
+     * Applies rotation of 90, 180, or 270 degrees to this pieces points
+     */
     public void rotateClockwise(int degrees) {
        if (degrees == 90) {
            // (x,y) -> (y,-x)
@@ -134,6 +141,9 @@ public class Piece {
     }
     
     
+    /**
+     * Applies vertical reflection to this pieces points
+     */
     public void reflectHoriz() {
         // (x,y) -> (-x,y)
         ArrayList<Point> new_points = new ArrayList<Point>();  
@@ -145,6 +155,9 @@ public class Piece {
     }
     
     
+    /**
+     * Applies vertical reflection to this pieces points
+     */
     public void reflectVert() {
         // (x,y) -> (x,-y)
         ArrayList<Point> new_points = new ArrayList<Point>();  
@@ -156,6 +169,10 @@ public class Piece {
     }
     
     
+    /**
+     * 
+     * @return An ArrayList of pieces in all unique orientations based off of this piece
+     */
     public ArrayList<Piece> permute() {
         ArrayList<Piece> perms = new ArrayList<Piece>();
         
@@ -190,6 +207,25 @@ public class Piece {
         this.reflectVert();
         
         return perms;
+    }
+    
+    
+    @Override
+    public String toString() {
+        String s = String.format("color: %s\n__________\n", this.color.toString());
+        for (int y = this.height-1; y >= 0; y--) {
+            for (int x = 0; x < this.width; x++) {
+                if (Point.listContians(this.points,new Point(x,y))) {
+                    s += "x";
+                }   
+                else {
+                    s+= " ";
+                }
+            }
+            s += "\n";
+        }
+        s += "__________\n";
+        return s;
     }
     
     
@@ -243,10 +279,277 @@ public class Piece {
     }
     
     
-    
-    
-    
-    
-    
-    
+    /**
+     * 
+     * @param color Color of the pieces to create
+     * @return An ArrayList of all starting Blokus pieces with their permutations set
+     */
+    public static ArrayList<Piece> createPieces(Color color) {
+        ArrayList<Piece> pieces = new ArrayList<Piece>();
+        
+        int w;
+        int h;
+        Piece p;
+        
+        // 1
+        ArrayList<Point> points = new ArrayList<Point>();
+        points.add(new Point(0,0));
+        w = 1;
+        h = 1;
+        p = new Piece(points, w, h, color);
+        p.setPermutations(p.permute());
+        pieces.add(p);
+        
+        //2
+        points = new ArrayList<Point>();
+        points.add(new Point(0,0));
+        points.add(new Point(1,0));
+        w = 2;
+        h = 1;
+        p = new Piece(points, w, h, color);
+        p.setPermutations(p.permute());
+        pieces.add(p);
+        
+        //I3
+        points = new ArrayList<Point>();
+        points.add(new Point(0,0));
+        points.add(new Point(1,0));
+        points.add(new Point(2,0));
+        w = 3;
+        h = 1;
+        p = new Piece(points, w, h, color);
+        p.setPermutations(p.permute());
+        pieces.add(p);
+        
+        //I4
+        points = new ArrayList<Point>();
+        points.add(new Point(0,0));
+        points.add(new Point(1,0));
+        points.add(new Point(2,0));
+        points.add(new Point(3,0));
+        w = 4;
+        h = 1;
+        p = new Piece(points, w, h, color);
+        p.setPermutations(p.permute());
+        pieces.add(p);
+        
+        //I5
+        points = new ArrayList<Point>();
+        points.add(new Point(0,0));
+        points.add(new Point(1,0));
+        points.add(new Point(2,0));
+        points.add(new Point(3,0));
+        points.add(new Point(4,0));
+        w = 5;
+        h = 1;
+        p = new Piece(points, w, h, color);
+        p.setPermutations(p.permute());
+        pieces.add(p);
+        
+        //L4
+        points = new ArrayList<Point>();
+        points.add(new Point(0,0));
+        points.add(new Point(0,1));
+        points.add(new Point(1,0));
+        points.add(new Point(2,0));
+        w = 3;
+        h = 2;
+        p = new Piece(points, w, h, color);
+        p.setPermutations(p.permute());
+        pieces.add(p);
+        
+        //L5
+        points = new ArrayList<Point>();
+        points.add(new Point(0,0));
+        points.add(new Point(0,1));
+        points.add(new Point(1,0));
+        points.add(new Point(2,0));
+        points.add(new Point(3,0));
+        w = 4;
+        h = 2;
+        p = new Piece(points, w, h, color);
+        p.setPermutations(p.permute());
+        pieces.add(p);
+        
+        //Y
+        points = new ArrayList<Point>();
+        points.add(new Point(0,0));
+        points.add(new Point(1,1));
+        points.add(new Point(1,0));
+        points.add(new Point(2,0));
+        points.add(new Point(3,0));
+        w = 4;
+        h = 2;
+        p = new Piece(points, w, h, color);
+        p.setPermutations(p.permute());
+        pieces.add(p);
+        
+        // N
+        points = new ArrayList<Point>();
+        points.add(new Point(0,0));
+        points.add(new Point(1,1));
+        points.add(new Point(1,0));
+        points.add(new Point(2,1));
+        points.add(new Point(3,1));
+        w = 4;
+        h = 2;
+        p = new Piece(points, w, h, color);
+        p.setPermutations(p.permute());
+        pieces.add(p);
+        
+        // Z4
+        points = new ArrayList<Point>();
+        points.add(new Point(0,0));
+        points.add(new Point(1,1));
+        points.add(new Point(1,0));
+        points.add(new Point(2,1));
+        w = 3;
+        h = 2;
+        p = new Piece(points, w, h, color);
+        p.setPermutations(p.permute());
+        pieces.add(p);
+        
+        // Z5
+        points = new ArrayList<Point>();
+        points.add(new Point(0,0));
+        points.add(new Point(1,1));
+        points.add(new Point(1,0));
+        points.add(new Point(1,2));
+        points.add(new Point(2,2));
+        w = 3;
+        h = 3;
+        p = new Piece(points, w, h, color);
+        p.setPermutations(p.permute());
+        pieces.add(p);
+        
+        // Square, O
+        points = new ArrayList<Point>();
+        points.add(new Point(0,0));
+        points.add(new Point(1,0));
+        points.add(new Point(1,1));
+        points.add(new Point(0,1));
+        w = 2;
+        h = 2;
+        p = new Piece(points, w, h, color);
+        p.setPermutations(p.permute());
+        pieces.add(p);
+        
+        // +, X
+        points = new ArrayList<Point>();
+        points.add(new Point(0,1));
+        points.add(new Point(1,1));
+        points.add(new Point(2,1));
+        points.add(new Point(1,2));
+        points.add(new Point(1,0));
+        w = 3;
+        h = 3;
+        p = new Piece(points, w, h, color);
+        p.setPermutations(p.permute());
+        pieces.add(p);
+        
+        // T4
+        points = new ArrayList<Point>();
+        points.add(new Point(0,0));
+        points.add(new Point(1,1));
+        points.add(new Point(1,0));
+        points.add(new Point(2,0));
+        w = 3;
+        h = 2;
+        p = new Piece(points, w, h, color);
+        p.setPermutations(p.permute());
+        pieces.add(p);
+        
+        // T5
+        points = new ArrayList<Point>();
+        points.add(new Point(0,0));
+        points.add(new Point(1,1));
+        points.add(new Point(1,0));
+        points.add(new Point(2,0));
+        points.add(new Point(1,2));
+        w = 3;
+        h = 3;
+        p = new Piece(points, w, h, color);
+        p.setPermutations(p.permute());
+        pieces.add(p);
+        
+        //V3
+        points = new ArrayList<Point>();
+        points.add(new Point(0,0));
+        points.add(new Point(0,1));
+        points.add(new Point(1,0));
+        w = 2;
+        h = 2;
+        p = new Piece(points, w, h, color);
+        p.setPermutations(p.permute());
+        pieces.add(p);
+        
+        //V5
+        points = new ArrayList<Point>();
+        points.add(new Point(0,0));
+        points.add(new Point(0,1));
+        points.add(new Point(1,0));
+        points.add(new Point(0,2));
+        points.add(new Point(2,0));
+        w = 3;
+        h = 3;
+        p = new Piece(points, w, h, color);
+        p.setPermutations(p.permute());
+        pieces.add(p);
+      
+        //U
+        points = new ArrayList<Point>();
+        points.add(new Point(0,0));
+        points.add(new Point(0,1));
+        points.add(new Point(1,0));
+        points.add(new Point(2,0));
+        points.add(new Point(2,1));
+        w = 3;
+        h = 2;
+        p = new Piece(points, w, h, color);
+        p.setPermutations(p.permute());
+        pieces.add(p);
+        
+        //W
+        points = new ArrayList<Point>();
+        points.add(new Point(0,0));
+        points.add(new Point(1,0));
+        points.add(new Point(1,1));
+        points.add(new Point(2,1));
+        points.add(new Point(2,2));
+        w = 3;
+        h = 3;
+        p = new Piece(points, w, h, color);
+        p.setPermutations(p.permute());
+        pieces.add(p);
+        
+        // P
+        points = new ArrayList<Point>();
+        points.add(new Point(0,0));
+        points.add(new Point(0,1));
+        points.add(new Point(1,0));
+        points.add(new Point(1,1));
+        points.add(new Point(0,2));
+        w = 2;
+        h = 3;
+        p = new Piece(points, w, h, color);
+        p.setPermutations(p.permute());
+        pieces.add(p);
+        
+        //F
+        points = new ArrayList<Point>();
+        points.add(new Point(0,0));
+        points.add(new Point(0,1));
+        points.add(new Point(1,1));
+        points.add(new Point(2,1));
+        points.add(new Point(1,2));
+        w = 3;
+        h = 3;
+        p = new Piece(points, w, h, color);
+        p.setPermutations(p.permute());
+        pieces.add(p);
+        
+        return pieces;
+    }
+
+
 }

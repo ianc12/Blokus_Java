@@ -23,6 +23,10 @@ public class Square {
         this.sideNeighbors = new Square[4];
     }
     
+    /**
+     * 
+     * @return true if this square is filled by a piece, false else
+     */
     public boolean filled() {
         if (this.fillColor == Color.NONE) {
             return false;
@@ -31,6 +35,13 @@ public class Square {
         return true;
     }
     
+    /**
+     * 
+     * @param other square to compare distance to
+     * @param xdist distance in the x direction
+     * @param ydist distance in the y direction
+     * @return true if this square is within both xdist and ydist of the 'other' square, false else
+     */
     public boolean within(Square other, int xdist, int ydist) {
         boolean withinX = Math.abs(this.x - other.getX()) <= xdist ;
         boolean withinY = Math.abs(this.y - other.getY()) <= ydist ;
@@ -49,16 +60,8 @@ public class Square {
         return x;
     }
 
-    public void setX(int x) {
-        this.x = x;
-    }
-
     public int getY() {
         return y;
-    }
-
-    public void setY(int y) {
-        this.y = y;
     }
 
     public Square[] getCornerNeigbors() {
