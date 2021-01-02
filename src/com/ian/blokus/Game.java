@@ -14,8 +14,12 @@ public class Game {
 //            System.out.printf(p.toString());
 //        }
         //System.out.println(Color.BLUE.toString().substring(0, 2));
+    Board b = new Board(14, null, null);
+    b.makeMove(new Move(pieces.get(14), 4,4));
+    System.out.println(b.toString());
         
-       
     }
 
+    
+    
 }

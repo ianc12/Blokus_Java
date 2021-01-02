@@ -183,7 +183,6 @@ public class Board {
 //            else if (c == playerTwo.getColor()) {
 //                
 //            }
-            
         }
     }
 
