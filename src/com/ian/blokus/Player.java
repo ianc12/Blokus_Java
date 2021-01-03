@@ -1,13 +1,21 @@
 package com.ian.blokus;
 
+import java.lang.Runtime;
+
 public class Player {
 
     public static final int MINIMUM_FREE_MEMORY = 100 * 1024 * 1024;
+    public static final int NUM_MOVES_KEPT = 30;
+    
+    
+    
     private Color color;
     private AgentType agentType;
     private Player opponent;
     private int thinkTime; // in seconds
     private int moveNum;
+    
+    
     
     public Player(Color color, AgentType agentType, int thinkTime) {
         this.color = color;

@@ -47,6 +47,10 @@ public class Piece {
         return true;
     }
     
+    
+    /**
+     * @return smallest dimension of this piece
+     */
     public int minDimension() {
         if (this.width < this.height) {
             return this.width;
@@ -71,13 +75,17 @@ public class Piece {
     }
 
 
+    /**
+     * @return the number of points in this piece
+     */
     public int size() {
         return this.points.size();
     }
     
     
     /**
-     * Applies rotation of 90, 180, or 270 degrees to this pieces points
+     * Applies clockwise rotation of 90, 180, or 270 degrees to this pieces points
+     * @param degrees degrees to rotate
      */
     public void rotateClockwise(int degrees) {
        if (degrees == 90) {
@@ -125,6 +133,10 @@ public class Piece {
     }
     
     
+    /**
+     * Applies counterclockwise rotation of 90, 180, or 270 degrees to this pieces points
+     * @param degrees degrees to rotate
+     */
     public void rotateCounterclockwise(int degrees) {
         if (degrees == 90) {
             this.rotateClockwise(270);

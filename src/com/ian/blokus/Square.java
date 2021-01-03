@@ -64,13 +64,13 @@ public class Square {
         return y;
     }
 
-    public Square[] getCornerNeigbors() {
+    public Square[] getCornerNeighbors() {
         return cornerNeighbors;
     }
 
-    public void setCornerNeigbors(Square[] cornerNeigbors) {
+    public void setCornerNeighbors(Square[] cornerNeighbors) {
         for (int i = 0; i < this.cornerNeighbors.length; i++) {
-            this.cornerNeighbors[i] = cornerNeigbors[i]; 
+            this.cornerNeighbors[i] = cornerNeighbors[i]; 
         }
     }
 

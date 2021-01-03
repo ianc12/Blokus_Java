@@ -13,6 +13,8 @@ public class Board {
     private int size;
     private Player playerOne;
     private Player playerTwo;
+    private ArrayList<Square> playerOneFilled;
+    private ArrayList<Square> playerTwoFilled;
     private int player1MaxX;
     private int player1MaxY;
     private int player2MaxX;
@@ -27,10 +29,12 @@ public class Board {
         this.playerOne = playerOne;
         this.playerTwo = playerTwo;
         this.board = new Square[size][size];
-        player1MaxX = 0;
-        player1MaxY = 0;
-        player2MaxX = 0;
-        player2MaxY = 0;
+        this.playerOneFilled = new ArrayList<Square>();
+        this.playerTwoFilled = new ArrayList<Square>();
+        this.player1MaxX = 0;
+        this.player1MaxY = 0;
+        this.player2MaxX = 0;
+        this.player2MaxY = 0;
         
         
         // create the squares
@@ -68,7 +72,7 @@ public class Board {
                         }
                     }
                 }
-                square.setCornerNeigbors(corners);
+                square.setCornerNeighbors(corners);
                 square.setSideNeighbors(sides);
             }
         }  
@@ -107,7 +111,7 @@ public class Board {
                 }
             }
             
-            for (Square cN : s.getCornerNeigbors()) {
+            for (Square cN : s.getCornerNeighbors()) {
                 if (cN != null && cN.getFillColor() == move.piece.getColor()) {
                     touchesCorner = true;
                     break;
@@ -160,7 +164,13 @@ public class Board {
             for (int y = 0; y < this.size; y++) {
                 Square ours = this.getSquare(x, y);
                 Square theirs = b.getSquare(x, y);
-                theirs.setFillColor(ours.getFillColor());
+                Color c = ours.getFillColor();
+                theirs.setFillColor(c);
+                if (c == this.playerOne.getColor()) {
+                    b.playerOneFilled.add(theirs);
+                } else if (c == this.playerTwo.getColor()) {
+                    b.playerTwoFilled.add(theirs);
+                }
             }
         }
         // TODO: other board info copy
@@ -174,15 +184,14 @@ public class Board {
     public void makeMove(Move move) {
         for (Point p : move.piece.getPoints()) {
             Square s = this.getSquare(move.x + p.x, move.y + p.y);
-            s.setFillColor(move.piece.getColor());
-            //Color c = move.piece.getColor();
-            //TODO: add max square optimizations
-//            if (c == playerOne.getColor()) {
-//                
-//            }
-//            else if (c == playerTwo.getColor()) {
-//                
-//            }
+            Color c = move.piece.getColor();
+            s.setFillColor(c);
+            if (c == this.playerOne.getColor()) {
+                this.playerOneFilled.add(s);
+            } else if (c == this.playerTwo.getColor()) {
+                this.playerTwoFilled.add(s);
+            }
+            
         }
     }
 
@@ -194,10 +203,61 @@ public class Board {
     public void unmakeMove(Move move) {
         for (Point p : move.piece.getPoints()) {
             Square s = this.getSquare(move.x + p.x, move.y + p.y);
+            Color c = move.piece.getColor();
             s.setFillColor(Color.NONE);
+            if (c == this.playerOne.getColor()) {
+                this.playerOneFilled.remove(s);
+            } else if (c == this.playerTwo.getColor()) {
+                this.playerTwoFilled.remove(s);
+            }
         }
     }
     
+    
+    
+    
+    public int evaluateCorners(Player player) {
+        int numCorners = 0;
+        if (player == this.playerOne) {
+            for (Square s : this.playerOneFilled) {
+                for (Square cornerN : s.getCornerNeighbors()) {
+                    
+                    if (cornerN != null && cornerN.getFillColor() == Color.NONE) {
+                        boolean validCorner = true;
+                    
+                        for (Square sideN : cornerN.getSideNeighbors()) {
+                            if (sideN != null && sideN.getFillColor() == this.playerOne.getColor()) {
+                                validCorner = false; 
+                            }
+                        }
+                        if (validCorner) {
+                            numCorners++;
+                        }
+                    }
+                }
+            }
+        } else if (player == this.playerTwo) {
+            for (Square s : this.playerTwoFilled) {
+                for (Square cornerN : s.getCornerNeighbors()) {
+                    
+                    if (cornerN != null && cornerN.getFillColor() == Color.NONE) {
+                        boolean validCorner = true;
+                    
+                        for (Square sideN : cornerN.getSideNeighbors()) {
+                            if (sideN != null && sideN.getFillColor() == this.playerTwo.getColor()) {
+                                validCorner = false; 
+                            }
+                        }
+                        if (validCorner) {
+                            numCorners++;
+                        }
+                    }
+                }
+            }
+            
+        } 
+        return numCorners;
+    }
     
     /**
      * makes the move provided if it is a valid first move
